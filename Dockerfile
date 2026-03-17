@@ -2,12 +2,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy the project file and restore dependencies
-COPY ["SMMS.csproj", "./"]
-RUN dotnet restore "./SMMS.csproj"
+# Copy the project file from the SMMS folder and restore dependencies
+COPY ["SMMS/SMMS.csproj", "SMMS/"]
+RUN dotnet restore "SMMS/SMMS.csproj"
 
-# Copy the remaining files and build the project
+# Copy all files and build the project
 COPY . .
+WORKDIR "/app/SMMS"
 RUN dotnet build "SMMS.csproj" -c Release -o /app/build
 
 # Publish the project
