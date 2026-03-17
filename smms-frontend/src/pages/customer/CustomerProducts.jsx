@@ -73,12 +73,6 @@ const CustomerProducts = () => {
     { name: 'Wishlist', href: '/customer/wishlist', icon: Heart, current: false },
   ];
 
-  const getProductImageUrl = (imageUrl) => {
-    if (!imageUrl) return null;
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
-    return `http://localhost:5200${imageUrl}`;
-  };
-
   const getWishlistStorageKey = () => {
     return user?.userId ? `customerWishlist_${user.userId}` : 'customerWishlist';
   };
