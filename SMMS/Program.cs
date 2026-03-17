@@ -130,8 +130,10 @@ builder.Services.AddCors(options =>
             "https://localhost:3000",
             "https://localhost:3001",
             "https://localhost:3002",
-            "https://freshmart-frontend.onrender.com" // Update this once you have your frontend URL
+            "https://freshmart-frontend.onrender.com", // Previous Render placeholder
+            "https://fresh-mart-frontend.vercel.app"   // Vercel placeholder
         )
+         .SetIsOriginAllowed(origin => origin.EndsWith(".vercel.app") || origin.StartsWith("http://localhost") || origin.StartsWith("https://localhost"))
          .AllowAnyHeader()
          .AllowAnyMethod()
          .AllowCredentials();
