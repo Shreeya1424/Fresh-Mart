@@ -1,0 +1,6 @@
+@SMMS_HostAddress = http://localhost:5131
+
+GET {{SMMS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
