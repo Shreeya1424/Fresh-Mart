@@ -154,14 +154,18 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseStaticFiles(); // serve files from wwwroot (for uploaded images)
+
+// Enable Swagger in all environments for testing deployment
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMMS API V1");
+    c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMMS API V1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
-    });
+    // development specific logic if any
 }
 
 // Explicit routing for correct CORS ordering
