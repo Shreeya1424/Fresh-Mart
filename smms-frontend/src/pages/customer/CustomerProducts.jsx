@@ -480,6 +480,12 @@ const CustomerProducts = () => {
     return 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=400&fit=crop'; 
   };
 
+  const getProductImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
+    return `https://fresh-mart-105h.onrender.com${imageUrl}`;
+  };
+
   const getCategoryTileImageUrl = (category) => {
     // Always use the keyword-based mapping for consistency
     return getCategoryImageUrl(category);

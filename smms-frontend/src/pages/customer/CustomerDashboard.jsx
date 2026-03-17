@@ -98,7 +98,7 @@ const CustomerDashboard = () => {
   const getProductImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
-    return `http://localhost:5200${imageUrl}`;
+    return `https://fresh-mart-105h.onrender.com${imageUrl}`;
   };
 
   const getCategoryImageUrl = (category) => {
