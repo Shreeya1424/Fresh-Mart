@@ -26,7 +26,9 @@ import {
   DollarSign,
   Tag,
   Image,
-  Calendar
+  Calendar,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { productAPI, categoryAPI, subCategoryAPI } from '../../api';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -38,6 +40,9 @@ const AdminProducts = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -82,11 +87,15 @@ const AdminProducts = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     filterProducts();
   }, [products, searchTerm, categoryFilter, statusFilter]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, categoryFilter, statusFilter]);
 
   useEffect(() => {
     return () => {
@@ -94,23 +103,42 @@ const AdminProducts = () => {
       if (editProductImagePreview) URL.revokeObjectURL(editProductImagePreview);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [newProductImagePreview, editProductImagePreview]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
+      
+      // Determine categoryId for API call
+      let apiCategoryId = null;
+      if (categoryFilter !== 'All') {
+        const cat = categories.find(c => c.name === categoryFilter);
+        if (cat) apiCategoryId = cat.categoryId;
+      }
+
       const [productsRes, categoriesRes, subCategoriesRes] = await Promise.all([
-        productAPI.getAll(),
+        productAPI.getAll(currentPage, pageSize, searchTerm, apiCategoryId),
         categoryAPI.getAll(),
         subCategoryAPI.getAll()
       ]);
-      const productsData = Array.isArray(productsRes.data) ? productsRes.data : productsRes.data?.data ?? [];
+      
+      const rawProducts = productsRes.data;
+      const productsData = Array.isArray(rawProducts) ? rawProducts : (rawProducts?.data ?? []);
+      const pagination = Array.isArray(rawProducts) ? null : rawProducts?.pagination;
+
       const categoriesData = Array.isArray(categoriesRes.data) ? categoriesRes.data : categoriesRes.data?.data ?? [];
       const subCategoriesData = Array.isArray(subCategoriesRes.data) ? subCategoriesRes.data : subCategoriesRes.data?.data ?? [];
       
       setProducts(productsData);
       setCategories(categoriesData);
       setSubCategories(subCategoriesData);
+
+      if (pagination && Number.isFinite(pagination.totalPages)) {
+        setTotalPages(pagination.totalPages);
+      } else {
+        const inferredTotal = Array.isArray(rawProducts) ? rawProducts.length : (rawProducts?.totalCount ?? productsData.length);
+        setTotalPages(Math.max(1, Math.ceil((inferredTotal || 0) / pageSize)));
+      }
     } catch (err) {
       console.error('Error fetching data:', err);
       setProducts([]);
@@ -417,6 +445,22 @@ const AdminProducts = () => {
     return subCategories.filter(sub => sub.categoryId === parseInt(categoryId, 10));
   };
 
+  const getVisiblePages = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+      return pages;
+    }
+    pages.push(1);
+    let start = Math.max(2, currentPage - 1);
+    let end = Math.min(totalPages - 1, currentPage + 1);
+    if (start > 2) pages.push('...');
+    for (let p = start; p <= end; p++) pages.push(p);
+    if (end < totalPages - 1) pages.push('...');
+    pages.push(totalPages);
+    return pages;
+  };
+
   if (loading) {
     return <LoadingSpinner text="Loading products..." />;
   }
@@ -612,6 +656,53 @@ const AdminProducts = () => {
             );
           })}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-6 mt-8 pb-8">
+            <div className="text-sm text-gray-600 font-medium">
+              Page {currentPage} of {totalPages}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              
+              <div className="flex items-center gap-2">
+                {getVisiblePages().map((p, idx) => (
+                  typeof p === 'number' ? (
+                    <button
+                      key={`page-${p}`}
+                      onClick={() => setCurrentPage(p)}
+                      className={`w-10 h-10 rounded-xl border text-sm font-bold transition-all shadow-sm ${
+                        currentPage === p
+                          ? 'bg-green-600 border-green-600 text-white shadow-green-200'
+                          : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ) : (
+                    <span key={`ellipsis-${idx}`} className="px-2 text-gray-400 select-none font-bold">…</span>
+                  )
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
