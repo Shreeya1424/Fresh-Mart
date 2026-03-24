@@ -20,8 +20,9 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
   
-  const { register, loading } = useJwtAuth();
+  const { register, logout, loading } = useJwtAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -128,7 +129,13 @@ const Register = () => {
       });
 
       if (result.success) {
-        navigate('/customer/dashboard');
+        // Log out immediately to follow the "register -> then manual login" flow
+        logout();
+        setIsSuccess(true);
+        // Automatically redirect after 3 seconds
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
       } else {
         setServerError(result.error || 'Registration failed. Please try again.');
       }
@@ -139,6 +146,28 @@ const Register = () => {
 
   if (loading) {
     return <LoadingSpinner text="Creating your account..." />;
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center py-6 px-4">
+        <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-12 text-center border border-green-100">
+          <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+            <UserPlus className="h-12 w-12" />
+          </div>
+          <h2 className="text-3xl font-black text-gray-900 mb-4 tracking-tight">Registration Successful!</h2>
+          <p className="text-gray-500 font-medium text-lg leading-relaxed mb-8">
+            Your account has been created. You will be redirected to the login page in a moment to sign in manually.
+          </p>
+          <button 
+            onClick={() => navigate('/login')}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg transition-all transform hover:-translate-y-1 active:translate-y-0"
+          >
+            LOGIN NOW
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
