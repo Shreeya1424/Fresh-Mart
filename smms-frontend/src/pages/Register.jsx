@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useJwtAuth } from '../contexts/JwtAuthContext';
-import { Eye, EyeOff, User, Mail, Lock, Phone, UserPlus, MapPin, Home } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, Phone, UserPlus, MapPin, Home, Database, ArrowLeft } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Register = () => {
@@ -142,136 +142,151 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-xl w-full">
-        {/* Header Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-blue-600 p-8 text-white text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-              <UserPlus className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl w-full">
+        {/* Floating Back Button */}
+        <Link 
+          to="/login" 
+          className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-600 mb-6 transition-colors group"
+        >
+          <ArrowLeft className="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" />
+          Back to Login
+        </Link>
+
+        {/* Main Card */}
+        <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-100/50 overflow-hidden border border-gray-100">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-10 text-white text-center relative overflow-hidden">
+            {/* Abstract Background Shapes */}
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl mb-6 shadow-xl">
+                <UserPlus className="h-10 w-10 text-white" />
+              </div>
+              <h1 className="text-4xl font-black tracking-tight">Create Account</h1>
+              <p className="mt-3 text-blue-100 font-medium text-lg opacity-90">Start your shopping journey with Fresh Mart</p>
             </div>
-            <h1 className="text-3xl font-bold">Create Customer Account</h1>
-            <p className="mt-2 text-blue-100 opacity-90">Join our supermarket and start shopping online</p>
           </div>
 
-          <form className="p-10 space-y-8" onSubmit={handleSubmit}>
+          <form className="p-8 sm:p-12 space-y-10" onSubmit={handleSubmit}>
             {serverError && (
-              <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl text-sm font-medium flex items-center gap-3 animate-shake">
+              <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-2xl text-sm font-bold flex items-center gap-3 animate-shake">
                 <div className="flex-shrink-0 w-2 h-2 bg-red-600 rounded-full"></div>
                 {serverError}
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              {/* Name Field */}
-              <div className="md:col-span-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <User className="h-4 w-4 text-blue-600" />
-                  Full Name <span className="text-red-500">*</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+              {/* Full Name */}
+              <div className="md:col-span-2 group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <User className="h-4 w-4" />
+                  Full Name
                 </label>
                 <input
                   name="userName"
                   type="text"
                   value={formData.userName}
                   onChange={handleInputChange}
-                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                  className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none text-gray-900 font-bold placeholder:text-gray-300 ${
                     errors.userName 
-                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                    : 'border-transparent focus:border-blue-500 focus:bg-white'
-                  } shadow-sm hover:shadow-md`}
-                  placeholder="Enter your full name"
+                    ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                  }`}
+                  placeholder="e.g. John Doe"
                 />
-                {errors.userName && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.userName}</p>}
+                {errors.userName && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.userName}</p>}
               </div>
 
-              {/* Email Field */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <Mail className="h-4 w-4 text-blue-600" />
-                  Email Address <span className="text-red-500">*</span>
+              {/* Email */}
+              <div className="group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <Mail className="h-4 w-4" />
+                  Email Address
                 </label>
                 <input
                   name="email"
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                  className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none text-gray-900 font-bold placeholder:text-gray-300 ${
                     errors.email 
-                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                    : 'border-transparent focus:border-blue-500 focus:bg-white'
-                  } shadow-sm hover:shadow-md`}
-                  placeholder="you@example.com"
+                    ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                  }`}
+                  placeholder="john@example.com"
                 />
-                {errors.email && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.email}</p>}
+                {errors.email && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.email}</p>}
               </div>
 
-              {/* Phone Field */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <Phone className="h-4 w-4 text-blue-600" />
-                  Phone Number <span className="text-red-500">*</span>
+              {/* Phone */}
+              <div className="group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <Phone className="h-4 w-4" />
+                  Phone Number
                 </label>
-                <div className="relative group">
-                  <div className="absolute left-0 top-0 bottom-0 flex items-center px-4 pointer-events-none z-10 border-r-2 border-gray-200 my-2">
-                    <span className="text-blue-700 font-black text-sm">+91</span>
+                <div className="relative">
+                  <div className="absolute left-0 top-0 bottom-0 flex items-center px-5 pointer-events-none border-r-2 border-gray-200/50 my-3">
+                    <span className="text-blue-600 font-black text-sm">+91</span>
                   </div>
                   <input
                     name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className={`w-full pl-16 pr-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                    className={`w-full pl-20 pr-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none text-gray-900 font-bold placeholder:text-gray-300 ${
                       errors.phone 
-                      ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                      : 'border-transparent focus:border-blue-500 focus:bg-white'
-                    } shadow-sm hover:shadow-md`}
-                    placeholder="10-digit number"
+                      ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                      : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                    }`}
+                    placeholder="98765 43210"
                   />
                 </div>
-                {errors.phone && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.phone}</p>}
+                {errors.phone && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.phone}</p>}
               </div>
 
-              {/* Address Field */}
-              <div className="md:col-span-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <Home className="h-4 w-4 text-blue-600" />
-                  Complete Address <span className="text-red-500">*</span>
+              {/* Address */}
+              <div className="md:col-span-2 group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <Home className="h-4 w-4" />
+                  Residential Address
                 </label>
                 <textarea
                   name="address"
                   rows={2}
                   value={formData.address}
                   onChange={handleInputChange}
-                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none resize-none ${
+                  className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none resize-none text-gray-900 font-bold placeholder:text-gray-300 ${
                     errors.address 
-                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                    : 'border-transparent focus:border-blue-500 focus:bg-white'
-                  } shadow-sm hover:shadow-md`}
-                  placeholder="Street, area, landmark..."
+                    ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                  }`}
+                  placeholder="Apartment, Street, Area..."
                 />
-                {errors.address && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.address}</p>}
+                {errors.address && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.address}</p>}
               </div>
 
-              {/* City Row */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <MapPin className="h-4 w-4 text-blue-600" />
-                  City
+              {/* City */}
+              <div className="group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 transition-colors">
+                  <MapPin className="h-4 w-4" />
+                  Current City
                 </label>
                 <input
                   name="city"
                   type="text"
                   value={formData.city}
                   readOnly
-                  className="w-full px-5 py-3.5 bg-gray-100 border-2 border-transparent rounded-2xl text-gray-500 cursor-not-allowed font-bold"
+                  className="w-full px-6 py-4 bg-gray-100 border-2 border-transparent rounded-2xl text-gray-400 font-black cursor-not-allowed select-none"
                 />
               </div>
 
               {/* Pincode */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <Database className="h-4 w-4 text-blue-600" />
-                  Pincode <span className="text-red-500">*</span>
+              <div className="group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <Database className="h-4 w-4" />
+                  Area Pincode
                 </label>
                 <input
                   name="pincode"
@@ -279,74 +294,74 @@ const Register = () => {
                   maxLength="6"
                   value={formData.pincode}
                   onChange={handleInputChange}
-                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                  className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none text-gray-900 font-bold placeholder:text-gray-300 ${
                     errors.pincode 
-                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                    : 'border-transparent focus:border-blue-500 focus:bg-white'
-                  } shadow-sm hover:shadow-md`}
-                  placeholder="6-digit PIN"
+                    ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                  }`}
+                  placeholder="360001"
                 />
-                {errors.pincode && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.pincode}</p>}
+                {errors.pincode && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.pincode}</p>}
               </div>
 
               {/* Password */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <Lock className="h-4 w-4 text-blue-600" />
-                  Password <span className="text-red-500">*</span>
+              <div className="group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <Lock className="h-4 w-4" />
+                  Secure Password
                 </label>
-                <div className="relative group">
+                <div className="relative">
                   <input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                    className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none text-gray-900 font-bold pr-16 placeholder:text-gray-300 ${
                       errors.password 
-                      ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                      : 'border-transparent focus:border-blue-500 focus:bg-white'
-                    } shadow-sm hover:shadow-md pr-14`}
-                    placeholder="Min. 6 characters"
+                      ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                      : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                    }`}
+                    placeholder="••••••••"
                   />
                   <button
                     type="button"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-blue-600 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {errors.password && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.password}</p>}
+                {errors.password && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.password}</p>}
               </div>
 
               {/* Confirm Password */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
-                  <Lock className="h-4 w-4 text-blue-600" />
-                  Confirm Password <span className="text-red-500">*</span>
+              <div className="group">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                  <Lock className="h-4 w-4" />
+                  Repeat Password
                 </label>
-                <div className="relative group">
+                <div className="relative">
                   <input
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                    className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl transition-all duration-300 outline-none text-gray-900 font-bold pr-16 placeholder:text-gray-300 ${
                       errors.confirmPassword 
-                      ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
-                      : 'border-transparent focus:border-blue-500 focus:bg-white'
-                    } shadow-sm hover:shadow-md pr-14`}
-                    placeholder="Confirm password"
+                      ? 'border-red-100 focus:border-red-500 bg-red-50/30' 
+                      : 'border-transparent focus:border-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/10'
+                    }`}
+                    placeholder="••••••••"
                   />
                   <button
                     type="button"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-blue-600 transition-colors"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {errors.confirmPassword && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.confirmPassword}</p>}
+                {errors.confirmPassword && <p className="mt-2 text-[11px] text-red-500 font-black uppercase tracking-wider ml-2">{errors.confirmPassword}</p>}
               </div>
             </div>
 
@@ -355,29 +370,28 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-black py-5 rounded-3xl shadow-2xl shadow-blue-500/30 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-4 text-xl tracking-tighter disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-3 border-white/30 border-t-white"></div>
-                    <span>CREATING ACCOUNT...</span>
+                    <div className="animate-spin rounded-full h-6 w-6 border-4 border-white/30 border-t-white"></div>
+                    <span className="animate-pulse">PROCESSING...</span>
                   </>
                 ) : (
                   <>
-                    <UserPlus className="h-6 w-6" />
-                    <span>CREATE ACCOUNT</span>
+                    <UserPlus className="h-6 w-6 transform group-hover:scale-110 transition-transform" />
+                    <span>GET STARTED NOW</span>
                   </>
                 )}
               </button>
             </div>
-
             {/* Login Link */}
-            <div className="text-center pt-2">
-              <p className="text-sm text-gray-600">
+            <div className="text-center pt-8 border-t border-gray-100 mt-10">
+              <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-bold text-blue-600 hover:text-blue-700 transition-colors duration-200"
+                  className="text-blue-600 hover:text-blue-700 ml-2 transition-colors"
                 >
                   Sign in here
                 </Link>
