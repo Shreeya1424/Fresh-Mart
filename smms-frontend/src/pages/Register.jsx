@@ -154,191 +154,218 @@ const Register = () => {
             <p className="mt-2 text-blue-100 opacity-90">Join our supermarket and start shopping online</p>
           </div>
 
-          <form className="p-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="p-10 space-y-8" onSubmit={handleSubmit}>
             {serverError && (
-              <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium flex items-center gap-2">
-                <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+              <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl text-sm font-medium flex items-center gap-3 animate-shake">
+                <div className="flex-shrink-0 w-2 h-2 bg-red-600 rounded-full"></div>
                 {serverError}
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               {/* Name Field */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-                    <User className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    name="userName"
-                    type="text"
-                    value={formData.userName}
-                    onChange={handleInputChange}
-                    className={`input-field pl-12 ${errors.userName ? 'border-red-500 focus:ring-red-100' : ''}`}
-                    placeholder="Enter your full name"
-                  />
-                </div>
-                {errors.userName && <p className="mt-1 text-xs text-red-500 font-medium">{errors.userName}</p>}
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <User className="h-4 w-4 text-blue-600" />
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="userName"
+                  type="text"
+                  value={formData.userName}
+                  onChange={handleInputChange}
+                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                    errors.userName 
+                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-500 focus:bg-white'
+                  } shadow-sm hover:shadow-md`}
+                  placeholder="Enter your full name"
+                />
+                {errors.userName && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.userName}</p>}
               </div>
 
               {/* Email Field */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-                    <Mail className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`input-field pl-12 ${errors.email ? 'border-red-500 focus:ring-red-100' : ''}`}
-                    placeholder="you@example.com"
-                  />
-                </div>
-                {errors.email && <p className="mt-1 text-xs text-red-500 font-medium">{errors.email}</p>}
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <Mail className="h-4 w-4 text-blue-600" />
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                    errors.email 
+                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-500 focus:bg-white'
+                  } shadow-sm hover:shadow-md`}
+                  placeholder="you@example.com"
+                />
+                {errors.email && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.email}</p>}
               </div>
 
               {/* Phone Field */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <Phone className="h-4 w-4 text-blue-600" />
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
                 <div className="relative group">
-                  <div className="absolute left-0 top-0 bottom-0 flex items-center pl-4 pointer-events-none z-10">
-                    <span className="text-gray-500 font-bold text-sm border-r border-gray-200 pr-3">+91</span>
+                  <div className="absolute left-0 top-0 bottom-0 flex items-center px-4 pointer-events-none z-10 border-r-2 border-gray-200 my-2">
+                    <span className="text-blue-700 font-black text-sm">+91</span>
                   </div>
                   <input
                     name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className={`input-field pl-16 ${errors.phone ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`w-full pl-16 pr-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                      errors.phone 
+                      ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                      : 'border-transparent focus:border-blue-500 focus:bg-white'
+                    } shadow-sm hover:shadow-md`}
                     placeholder="10-digit number"
                   />
                 </div>
-                {errors.phone && <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone}</p>}
+                {errors.phone && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.phone}</p>}
               </div>
 
               {/* Address Field */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Complete Address *</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-3.5 pointer-events-none z-10">
-                    <Home className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <textarea
-                    name="address"
-                    rows={2}
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className={`input-field pl-12 resize-none ${errors.address ? 'border-red-500 focus:ring-red-100' : ''}`}
-                    placeholder="Street, area, landmark..."
-                  />
-                </div>
-                {errors.address && <p className="mt-1 text-xs text-red-500 font-medium">{errors.address}</p>}
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <Home className="h-4 w-4 text-blue-600" />
+                  Complete Address <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  name="address"
+                  rows={2}
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none resize-none ${
+                    errors.address 
+                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-500 focus:bg-white'
+                  } shadow-sm hover:shadow-md`}
+                  placeholder="Street, area, landmark..."
+                />
+                {errors.address && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.address}</p>}
               </div>
 
-              {/* City and Pincode Row */}
+              {/* City Row */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-                    <MapPin className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    name="city"
-                    type="text"
-                    value={formData.city}
-                    readOnly
-                    className="input-field pl-12 bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed font-medium"
-                  />
-                </div>
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <MapPin className="h-4 w-4 text-blue-600" />
+                  City
+                </label>
+                <input
+                  name="city"
+                  type="text"
+                  value={formData.city}
+                  readOnly
+                  className="w-full px-5 py-3.5 bg-gray-100 border-2 border-transparent rounded-2xl text-gray-500 cursor-not-allowed font-bold"
+                />
               </div>
 
+              {/* Pincode */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Pincode *</label>
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <Database className="h-4 w-4 text-blue-600" />
+                  Pincode <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="pincode"
                   type="text"
                   maxLength="6"
                   value={formData.pincode}
                   onChange={handleInputChange}
-                  className={`input-field px-4 ${errors.pincode ? 'border-red-500 focus:ring-red-100' : ''}`}
+                  className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                    errors.pincode 
+                    ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                    : 'border-transparent focus:border-blue-500 focus:bg-white'
+                  } shadow-sm hover:shadow-md`}
                   placeholder="6-digit PIN"
                 />
-                {errors.pincode && <p className="mt-1 text-xs text-red-500 font-medium">{errors.pincode}</p>}
+                {errors.pincode && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.pincode}</p>}
               </div>
 
-              {/* Password Field */}
+              {/* Password */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                  </div>
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <Lock className="h-4 w-4 text-blue-600" />
+                  Password <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
                   <input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`input-field pl-12 pr-12 ${errors.password ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                      errors.password 
+                      ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                      : 'border-transparent focus:border-blue-500 focus:bg-white'
+                    } shadow-sm hover:shadow-md pr-14`}
                     placeholder="Min. 6 characters"
                   />
                   <button
                     type="button"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {errors.password && <p className="mt-1 text-xs text-red-500 font-medium">{errors.password}</p>}
+                {errors.password && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.password}</p>}
               </div>
 
-              {/* Confirm Password Field */}
+              {/* Confirm Password */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password *</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                  </div>
+                <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2 ml-1">
+                  <Lock className="h-4 w-4 text-blue-600" />
+                  Confirm Password <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
                   <input
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`input-field pl-12 pr-12 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`w-full px-5 py-3.5 bg-gray-50 border-2 rounded-2xl transition-all duration-200 outline-none ${
+                      errors.confirmPassword 
+                      ? 'border-red-200 focus:border-red-500 bg-red-50/30' 
+                      : 'border-transparent focus:border-blue-500 focus:bg-white'
+                    } shadow-sm hover:shadow-md pr-14`}
                     placeholder="Confirm password"
                   />
                   <button
                     type="button"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {errors.confirmPassword && <p className="mt-1 text-xs text-red-500 font-medium">{errors.confirmPassword}</p>}
+                {errors.confirmPassword && <p className="mt-2 text-xs text-red-500 font-bold ml-1">{errors.confirmPassword}</p>}
               </div>
             </div>
 
             {/* Submit Button */}
-            <div className="pt-4">
+            <div className="pt-6">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full btn-primary py-4 flex justify-center items-center gap-2 text-lg"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white"></div>
-                    <span>Creating your account...</span>
+                    <div className="animate-spin rounded-full h-5 w-5 border-3 border-white/30 border-t-white"></div>
+                    <span>CREATING ACCOUNT...</span>
                   </>
                 ) : (
                   <>
-                    <UserPlus className="h-5 w-5" />
-                    <span>Create Customer Account</span>
+                    <UserPlus className="h-6 w-6" />
+                    <span>CREATE ACCOUNT</span>
                   </>
                 )}
               </button>
