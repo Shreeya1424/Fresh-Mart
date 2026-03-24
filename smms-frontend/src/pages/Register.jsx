@@ -19,6 +19,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
   
   const { register, loading } = useJwtAuth();
   const navigate = useNavigate();
@@ -36,50 +37,61 @@ const Register = () => {
         [name]: ''
       }));
     }
+    if (serverError) setServerError('');
   };
 
   const validateForm = () => {
     const newErrors = {};
     
+    // Full Name validation
     if (!formData.userName.trim()) {
       newErrors.userName = 'Full name is required';
-    } else if (formData.userName.length < 2) {
-      newErrors.userName = 'Name must be at least 2 characters';
+    } else if (formData.userName.trim().length < 3) {
+      newErrors.userName = 'Full name must be at least 3 characters';
     }
     
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = 'Email address is required';
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address';
     }
     
+    // Phone validation
+    const phoneDigits = formData.phone.replace(/\D/g, '');
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Phone number must be 10 digits';
+    } else if (phoneDigits.length !== 10) {
+      newErrors.phone = 'Phone number must be exactly 10 digits';
     }
 
+    // Address validation
     if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
+      newErrors.address = 'Complete address is required';
     }
 
+    // City validation
     if (!formData.city.trim()) {
       newErrors.city = 'City is required';
     }
 
+    // Pincode validation
     if (!formData.pincode.trim()) {
       newErrors.pincode = 'Pincode is required';
-    } else if (!/^\d{6}$/.test(formData.pincode)) {
-      newErrors.pincode = 'Pincode must be 6 digits';
+    } else if (!/^\d{6}$/.test(formData.pincode.trim())) {
+      newErrors.pincode = 'Pincode must be exactly 6 digits';
     }
     
-    if (!formData.password.trim()) {
+    // Password validation
+    if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
     
-    if (!formData.confirmPassword.trim()) {
+    // Confirm Password validation
+    if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
@@ -91,23 +103,29 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerError('');
     
     if (!validateForm()) return;
 
-    const result = await register({
-      userName: formData.userName,
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      city: formData.city,
-      pincode: formData.pincode,
-      password: formData.password,
-      role: formData.role
-    });
+    try {
+      const result = await register({
+        userName: formData.userName.trim(),
+        email: formData.email.trim().toLowerCase(),
+        phone: formData.phone.trim(),
+        address: formData.address.trim(),
+        city: formData.city.trim(),
+        pincode: formData.pincode.trim(),
+        password: formData.password,
+        role: 'Customer'
+      });
 
-    if (result.success) {
-      // Always navigate to customer dashboard since only customers can register
-      navigate('/customer/dashboard');
+      if (result.success) {
+        navigate('/customer/dashboard');
+      } else {
+        setServerError(result.error || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      setServerError('An unexpected error occurred. Please try again later.');
     }
   };
 
@@ -116,272 +134,210 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center">
-            <UserPlus className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-xl w-full">
+        {/* Header Card */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-blue-600 p-8 text-white text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+              <UserPlus className="h-8 w-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold">Create Customer Account</h1>
+            <p className="mt-2 text-blue-100 opacity-90">Join our supermarket and start shopping online</p>
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Create Customer Account
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Join our supermarket and start shopping online
-          </p>
-        </div>
 
-        {/* Registration Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            {/* Name Field */}
-            <div>
-              <label htmlFor="userName" className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="userName"
-                  name="userName"
-                  type="text"
-                  autoComplete="name"
-                  value={formData.userName}
-                  onChange={handleInputChange}
-                  className={`input-field pl-10 ${errors.userName ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="Enter your full name"
-                />
+          <form className="p-8 space-y-6" onSubmit={handleSubmit}>
+            {serverError && (
+              <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium flex items-center gap-2">
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                {serverError}
               </div>
-              {errors.userName && (
-                <p className="mt-1 text-sm text-red-600">{errors.userName}</p>
-              )}
-            </div>
+            )}
 
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`input-field pl-10 ${errors.email ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="Enter your email address"
-                />
-              </div>
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Phone Field */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                Phone Number *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className={`input-field pl-10 ${errors.phone ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="Enter 10-digit phone number"
-                />
-              </div>
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-              )}
-            </div>
-
-            {/* Address Field */}
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                Address *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Home className="h-5 w-5 text-gray-400" />
-                </div>
-                <textarea
-                  id="address"
-                  name="address"
-                  rows={2}
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className={`input-field pl-10 resize-none ${errors.address ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="Enter your complete address"
-                />
-              </div>
-              {errors.address && (
-                <p className="mt-1 text-sm text-red-600">{errors.address}</p>
-              )}
-            </div>
-
-            {/* City and Pincode Row */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                  City *
-                </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Name Field */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <MapPin className="h-5 w-5 text-gray-400" />
-                  </div>
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
-                    id="city"
+                    name="userName"
+                    type="text"
+                    value={formData.userName}
+                    onChange={handleInputChange}
+                    className={`input-field pl-10 ${errors.userName ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                {errors.userName && <p className="mt-1 text-xs text-red-500 font-medium">{errors.userName}</p>}
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`input-field pl-10 ${errors.email ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    placeholder="you@example.com"
+                  />
+                </div>
+                {errors.email && <p className="mt-1 text-xs text-red-500 font-medium">{errors.email}</p>}
+              </div>
+
+              {/* Phone Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className={`input-field pl-10 ${errors.phone ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    placeholder="10-digit number"
+                  />
+                </div>
+                {errors.phone && <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone}</p>}
+              </div>
+
+              {/* Address Field */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Complete Address *</label>
+                <div className="relative">
+                  <Home className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <textarea
+                    name="address"
+                    rows={2}
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className={`input-field pl-10 resize-none ${errors.address ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    placeholder="Street, area, landmark..."
+                  />
+                </div>
+                {errors.address && <p className="mt-1 text-xs text-red-500 font-medium">{errors.address}</p>}
+              </div>
+
+              {/* City and Pincode Row */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
                     name="city"
                     type="text"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 ${errors.city ? 'border-red-300 focus:ring-red-500' : ''}`}
+                    className={`input-field pl-10 ${errors.city ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="City"
                   />
                 </div>
-                {errors.city && (
-                  <p className="mt-1 text-sm text-red-600">{errors.city}</p>
-                )}
+                {errors.city && <p className="mt-1 text-xs text-red-500 font-medium">{errors.city}</p>}
               </div>
 
               <div>
-                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-1">
-                  Pincode *
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Pincode *</label>
                 <input
-                  id="pincode"
                   name="pincode"
                   type="text"
                   maxLength="6"
                   value={formData.pincode}
                   onChange={handleInputChange}
-                  className={`input-field ${errors.pincode ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="6-digit pincode"
+                  className={`input-field ${errors.pincode ? 'border-red-500 focus:ring-red-100' : ''}`}
+                  placeholder="6-digit PIN"
                 />
-                {errors.pincode && (
-                  <p className="mt-1 text-sm text-red-600">{errors.pincode}</p>
-                )}
+                {errors.pincode && <p className="mt-1 text-xs text-red-500 font-medium">{errors.pincode}</p>}
               </div>
-            </div>
 
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+              {/* Password Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    placeholder="Min. 6 characters"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
                 </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="Create a strong password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
+                {errors.password && <p className="mt-1 text-xs text-red-500 font-medium">{errors.password}</p>}
               </div>
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-              )}
-            </div>
 
-            {/* Confirm Password Field */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+              {/* Confirm Password Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password *</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    name="confirmPassword"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    className={`input-field pl-10 pr-10 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    placeholder="Confirm password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
                 </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  className={`input-field pl-10 pr-10 ${errors.confirmPassword ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  placeholder="Confirm your password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
+                {errors.confirmPassword && <p className="mt-1 text-xs text-red-500 font-medium">{errors.confirmPassword}</p>}
               </div>
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-              )}
             </div>
-          </div>
 
-          {/* Submit Button */}
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full flex justify-center items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Creating account...</span>
-                </>
-              ) : (
-                <span>Create Customer Account</span>
-              )}
-            </button>
-          </div>
-
-          {/* Login Link */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link
-                to="/login"
-                className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+            {/* Submit Button */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full btn-primary py-4 flex justify-center items-center gap-2 text-lg"
               >
-                Sign in here
-              </Link>
-            </p>
-          </div>
-        </form>
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white"></div>
+                    <span>Creating your account...</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-5 w-5" />
+                    <span>Create Customer Account</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Login Link */}
+            <div className="text-center pt-2">
+              <p className="text-sm text-gray-600">
+                Already have an account?{' '}
+                <Link
+                  to="/login"
+                  className="font-bold text-blue-600 hover:text-blue-700 transition-colors duration-200"
+                >
+                  Sign in here
+                </Link>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

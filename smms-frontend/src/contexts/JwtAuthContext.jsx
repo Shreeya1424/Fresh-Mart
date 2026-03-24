@@ -87,7 +87,7 @@ export const JwtAuthProvider = ({ children }) => {
       if (!token || !newUser) return { success: true };
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(newUser));
-      if (userData.role === 'Customer' && (userData.address || userData.city || userData.pincode)) {
+      if (userData.role === 'Customer') {
         try {
           await customerAPI.create({
             userId: newUser.userId,
@@ -98,6 +98,10 @@ export const JwtAuthProvider = ({ children }) => {
           });
         } catch (err) {
           console.error('Error creating customer profile:', err);
+          // If customer profile creation fails, we might want to inform the user
+          // but they are already registered as a user at this point.
+          // For now, we'll just throw the error to be caught by the outer catch block
+          throw new Error('User registered but customer profile creation failed: ' + (err.response?.data?.message || err.message));
         }
       }
       setUser(newUser);
