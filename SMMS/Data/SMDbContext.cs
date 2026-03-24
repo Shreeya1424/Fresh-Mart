@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SMMS.Models;
 
 namespace SMMS.Data
@@ -486,6 +486,20 @@ namespace SMMS.Data
                     FeedbackTargetType = "Product",
                     CreatedAt = new DateTime(2025, 1, 2)
                 }
+            );
+
+            //-------------------------------------------ZONES (RAJOT)
+            modelBuilder.Entity<Zone>().HasData(
+                new Zone { ZoneId = 1, ZoneName = "University Road", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 2, ZoneName = "Kalavad Road", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 3, ZoneName = "150 Feet Ring Road", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 4, ZoneName = "Nana Mava", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 5, ZoneName = "Raiya Road", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 6, ZoneName = "Maviya Nagar", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 7, ZoneName = "Kothariya Road", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 8, ZoneName = "Bhakti Nagar", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 9, ZoneName = "Gundavadi", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
+                new Zone { ZoneId = 10, ZoneName = "Junction Plot", City = "Rajkot", State = "Gujarat", IsActive = true, CreatedAt = new DateTime(2025, 1, 1) }
             );
 
 

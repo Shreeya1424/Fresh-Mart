@@ -362,66 +362,26 @@ const AdminProducts = () => {
     if (!isConfirmed) return;
     
     try {
-      console.log('🗑️ Deleting product via API:', productId);
-      console.log('🔗 DELETE to: http://localhost:5200/api/Product/' + productId);
-      
+      console.log('🔗 DELETE to: ' + productId);
       await productAPI.delete(productId);
-      
-      console.log('✅ Product deleted successfully from API');
-      setProducts(products.filter(product => product.productId !== productId));
-      toast.success('Product deleted successfully!');
-      
-    } catch (error) {
-      console.error('❌ Error deleting product:', error);
-      console.error('🔍 API Error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        message: error.message,
-        data: error.response?.data
-      });
-      
-      const errorMessage = error.response?.data?.message || error.message || 'Unknown error occurred';
-      toast.error(`Error deleting product: ${errorMessage}`);
+      toast.success('Product deleted successfully');
+      fetchData();
+    } catch (err) {
+      console.error('Delete error:', err);
+      toast.error('Failed to delete product');
     }
   };
 
-  const toggleProductStatus = async (product) => {
+  const handleToggleStatus = async (product) => {
     try {
-      const updatedProduct = { 
-        ...product, 
-        isActive: !product.isActive,
-        price: parseFloat(product.price),
-        currentStock: parseInt(product.currentStock) || 0,
-        lowStockValue: parseInt(product.lowStockValue) || 0,
-        categoryId: parseInt(product.categoryId)
-      };
-      
-      console.log('🔄 Toggling product status via API:', updatedProduct);
-      console.log('🔗 PUT to: http://localhost:5200/api/Product/' + product.productId);
-      
-      const response = await productAPI.update(product.productId, updatedProduct);
-      const productData = response?.data?.data || response?.data;
-      
-      if (productData) {
-        console.log('✅ Product status updated successfully:', productData);
-        setProducts(products.map(p => 
-          p.productId === product.productId ? productData : p
-        ));
-        
-        const statusText = updatedProduct.isActive ? 'activated' : 'deactivated';
-        toast.success(`Product ${statusText} successfully!`);
-      }
-    } catch (error) {
-      console.error('❌ Error updating product status:', error);
-      console.error('🔍 API Error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        message: error.message,
-        data: error.response?.data
-      });
-      
-      const errorMessage = error.response?.data?.message || error.message || 'Unknown error occurred';
-      toast.error(`Error updating product status: ${errorMessage}`);
+      const updatedProduct = { ...product, isActive: !product.isActive };
+      console.log('🔗 PUT to: ' + product.productId);
+      await productAPI.update(product.productId, updatedProduct);
+      toast.success(`Product ${updatedProduct.isActive ? 'activated' : 'disabled'} successfully`);
+      fetchData();
+    } catch (err) {
+      console.error('Status toggle error:', err);
+      toast.error('Failed to update product status');
     }
   };
 
@@ -476,11 +436,8 @@ const AdminProducts = () => {
               Product Management
             </h2>
             <p className="text-gray-600">Manage all products across the platform</p>
-            <p className="text-sm text-gray-500 mt-1">
-              API: http://localhost:5200/api/Product
-            </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               onClick={fetchData}
               className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
@@ -625,7 +582,7 @@ const AdminProducts = () => {
                       Edit
                     </button>
                     <button
-                      onClick={() => toggleProductStatus(product)}
+                      onClick={() => handleToggleStatus(product)}
                       className={`flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors ${
                         product.isActive 
                           ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 

@@ -51,8 +51,15 @@ const Layout = ({ children, navigation, title }) => {
     try {
       setLocationLoading(true);
       const response = await zoneAPI.getAll();
-      const list = Array.isArray(response?.data) ? response.data : response?.data?.data ?? [];
-      setZones(list);
+      console.log('Zone API Response:', response);
+      
+      // Handle various response structures
+      const list = Array.isArray(response?.data) 
+        ? response.data 
+        : (response?.data?.data || response?.data || []);
+      
+      console.log('Mapped Zone List:', list);
+      setZones(Array.isArray(list) ? list : []);
     } catch (error) {
       console.error('Error loading zones for location selector', error);
       setZones([]);
@@ -320,14 +327,16 @@ const Layout = ({ children, navigation, title }) => {
                         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
                       >
                         <option value="">Select a Zone</option>
-                        {zones.length > 0 ? (
+                        {locationLoading ? (
+                          <option disabled>Loading zones...</option>
+                        ) : zones.length > 0 ? (
                           zones.map((zone) => (
-                            <option key={zone.zoneId || zone.id} value={zone.name || zone.zoneName}>
-                              {zone.name || zone.zoneName}
+                            <option key={zone.zoneId || zone.ZoneId || zone.id} value={zone.zoneName || zone.ZoneName || zone.name}>
+                              {zone.zoneName || zone.ZoneName || zone.name}
                             </option>
                           ))
                         ) : (
-                          <option disabled>Loading zones...</option>
+                          <option disabled>No zones available</option>
                         )}
                       </select>
                     </div>

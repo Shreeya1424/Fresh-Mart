@@ -213,7 +213,7 @@ const CustomerDashboard = () => {
     const iconName = category.iconName || category.IconName;
     if (iconName && iconName !== 'string' && iconName !== 'default.png') {
       if (iconName.startsWith('http://') || iconName.startsWith('https://')) return iconName;
-      if (iconName.startsWith('/')) return `http://localhost:5200${iconName}`;
+      if (iconName.startsWith('/')) return `https://fresh-mart-105h.onrender.com${iconName}`;
     }
     
     // 3. FINAL DEFAULT FALLBACK (High quality grocery bundle)
