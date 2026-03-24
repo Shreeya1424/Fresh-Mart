@@ -98,6 +98,7 @@ const Layout = ({ children, navigation, title }) => {
     if (!user || user.role !== 'Customer') return;
     const hasLocation = loadStoredLocation();
     if (!hasLocation) {
+      loadZones();
       setLocationModalOpen(true);
     }
   }, [user]);
@@ -313,7 +314,22 @@ const Layout = ({ children, navigation, title }) => {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">Zone</label>
-                      <input type="text" value={newZoneName} onChange={(e) => setNewZoneName(e.target.value)} placeholder="e.g. University Road" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+                      <select 
+                        value={newZoneName} 
+                        onChange={(e) => setNewZoneName(e.target.value)} 
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                      >
+                        <option value="">Select a Zone</option>
+                        {zones.length > 0 ? (
+                          zones.map((zone) => (
+                            <option key={zone.zoneId || zone.id} value={zone.name || zone.zoneName}>
+                              {zone.name || zone.zoneName}
+                            </option>
+                          ))
+                        ) : (
+                          <option disabled>Loading zones...</option>
+                        )}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">Area / Society name</label>
