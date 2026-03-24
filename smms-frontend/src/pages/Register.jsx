@@ -12,7 +12,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     address: '',
-    city: '',
+    city: 'Rajkot',
     pincode: '',
     role: 'Customer' // Fixed to Customer only
   });
@@ -26,10 +26,18 @@ const Register = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Prevent changing city
+    if (name === 'city') return;
+
+    // Handle phone number digits only
+    if (name === 'phone') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setFormData(prev => ({ ...prev, [name]: digitsOnly }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -159,7 +167,9 @@ const Register = () => {
               <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" />
+                  </div>
                   <input
                     name="userName"
                     type="text"
@@ -176,7 +186,9 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <Mail className="h-5 w-5 text-gray-400" />
+                  </div>
                   <input
                     name="email"
                     type="email"
@@ -192,14 +204,16 @@ const Register = () => {
               {/* Phone Field */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <div className="relative group">
+                  <div className="absolute left-0 top-0 bottom-0 flex items-center pl-3 pointer-events-none border-r border-gray-200 pr-2 my-2">
+                    <span className="text-gray-500 font-bold text-sm">+91</span>
+                  </div>
                   <input
                     name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 ${errors.phone ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-14 ${errors.phone ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="10-digit number"
                   />
                 </div>
@@ -210,7 +224,9 @@ const Register = () => {
               <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Complete Address *</label>
                 <div className="relative">
-                  <Home className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <div className="absolute left-3 top-3.5 pointer-events-none">
+                    <Home className="h-5 w-5 text-gray-400" />
+                  </div>
                   <textarea
                     name="address"
                     rows={2}
@@ -227,17 +243,17 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <MapPin className="h-5 w-5 text-gray-400" />
+                  </div>
                   <input
                     name="city"
                     type="text"
                     value={formData.city}
-                    onChange={handleInputChange}
-                    className={`input-field pl-10 ${errors.city ? 'border-red-500 focus:ring-red-100' : ''}`}
-                    placeholder="City"
+                    readOnly
+                    className="input-field pl-10 bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed font-medium"
                   />
                 </div>
-                {errors.city && <p className="mt-1 text-xs text-red-500 font-medium">{errors.city}</p>}
               </div>
 
               <div>
@@ -258,7 +274,9 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
                   <input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
@@ -282,7 +300,9 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password *</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
                   <input
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
