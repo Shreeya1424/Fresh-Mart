@@ -167,7 +167,7 @@ const Register = () => {
               <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                     <User className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -175,7 +175,7 @@ const Register = () => {
                     type="text"
                     value={formData.userName}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 ${errors.userName ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-12 ${errors.userName ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -186,7 +186,7 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                     <Mail className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -194,7 +194,7 @@ const Register = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 ${errors.email ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-12 ${errors.email ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="you@example.com"
                   />
                 </div>
@@ -205,15 +205,15 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
                 <div className="relative group">
-                  <div className="absolute left-0 top-0 bottom-0 flex items-center pl-3 pointer-events-none border-r border-gray-200 pr-2 my-2">
-                    <span className="text-gray-500 font-bold text-sm">+91</span>
+                  <div className="absolute left-0 top-0 bottom-0 flex items-center pl-4 pointer-events-none z-10">
+                    <span className="text-gray-500 font-bold text-sm border-r border-gray-200 pr-3">+91</span>
                   </div>
                   <input
                     name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className={`input-field pl-14 ${errors.phone ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-16 ${errors.phone ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="10-digit number"
                   />
                 </div>
@@ -224,7 +224,7 @@ const Register = () => {
               <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Complete Address *</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-3.5 pointer-events-none">
+                  <div className="absolute left-4 top-3.5 pointer-events-none z-10">
                     <Home className="h-5 w-5 text-gray-400" />
                   </div>
                   <textarea
@@ -232,7 +232,7 @@ const Register = () => {
                     rows={2}
                     value={formData.address}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 resize-none ${errors.address ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-12 resize-none ${errors.address ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="Street, area, landmark..."
                   />
                 </div>
@@ -243,7 +243,7 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                     <MapPin className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -251,7 +251,7 @@ const Register = () => {
                     type="text"
                     value={formData.city}
                     readOnly
-                    className="input-field pl-10 bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed font-medium"
+                    className="input-field pl-12 bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed font-medium"
                   />
                 </div>
               </div>
@@ -264,7 +264,7 @@ const Register = () => {
                   maxLength="6"
                   value={formData.pincode}
                   onChange={handleInputChange}
-                  className={`input-field ${errors.pincode ? 'border-red-500 focus:ring-red-100' : ''}`}
+                  className={`input-field px-4 ${errors.pincode ? 'border-red-500 focus:ring-red-100' : ''}`}
                   placeholder="6-digit PIN"
                 />
                 {errors.pincode && <p className="mt-1 text-xs text-red-500 font-medium">{errors.pincode}</p>}
@@ -274,7 +274,7 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                     <Lock className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -282,12 +282,12 @@ const Register = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-12 pr-12 ${errors.password ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="Min. 6 characters"
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -300,7 +300,7 @@ const Register = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password *</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                     <Lock className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -308,12 +308,12 @@ const Register = () => {
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 pr-10 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-100' : ''}`}
+                    className={`input-field pl-12 pr-12 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-100' : ''}`}
                     placeholder="Confirm password"
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
