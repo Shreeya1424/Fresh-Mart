@@ -196,16 +196,6 @@ namespace SMMS.Data
                 new SubCategory { SubCategoryId = 2, SubCategoryName = "Vegetables", CategoryId = 1 }
             );
 
-            //-------------------------------------------ZONE 
-            modelBuilder.Entity<Zone>().HasData(
-                new Zone
-                {ZoneId = 1, ZoneName = "North Zone", City = "Ahmedabad", State = "Gujarat", Country = "India",
-                    PincodeNumber = 380001, IsActive = true, CreatedAt = new DateTime(2025, 1, 1) },
-                new Zone
-                {ZoneId = 2, ZoneName = "South Zone",  City = "Surat", State = "Gujarat", Country = "India",
-                    PincodeNumber = 395003, IsActive = true, CreatedAt = new DateTime(2025, 1, 1)}
-            );
-
             //-------------------------------------------USERS
             modelBuilder.Entity<User>().HasData(
                 new User

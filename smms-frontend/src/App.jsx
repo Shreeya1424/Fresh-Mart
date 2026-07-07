@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Auth
 import Login from './pages/auth/Login';
 import Register from './pages/Register';
+import PublicBrowse from './pages/PublicBrowse';
 
 // Customer
 import CustomerDashboard from './pages/customer/CustomerDashboard';
@@ -48,6 +49,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public Routes */}
+            <Route path="/browse" element={<PublicBrowse />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
@@ -272,8 +274,8 @@ function App() {
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/404" element={<NotFound />} />
             
-            {/* Default Route - Always redirect to login first */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            {/* Default Route - Public browse page (like Blinkit/Zomato) */}
+            <Route path="/" element={<Navigate to="/browse" replace />} />
             
             {/* Catch all route */}
             <Route path="*" element={<Navigate to="/404" replace />} />
