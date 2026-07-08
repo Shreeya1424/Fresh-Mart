@@ -203,15 +203,10 @@ const PublicBrowse = () => {
                 <div key={product.productId} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
                   {/* Image */}
                   <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                    {product.imageUrl ? (
-                      <img src={getImageUrl(product.imageUrl)} alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => { e.target.style.display = 'none'; }} />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Package className="h-12 w-12 text-gray-300" />
-                      </div>
-                    )}
+                    <img src={product.imageUrl ? getImageUrl(product.imageUrl) : `https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=400&fit=crop`}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => { e.target.onerror = null; e.target.src = `https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=400&fit=crop`; }} />
                     <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium ${stock.cls}`}>
                       {stock.label}
                     </div>
