@@ -65,8 +65,9 @@ const CustomerWishlist = () => {
           return;
         }
 
-        const res = await productAPI.getAll();
-        const productsList = Array.isArray(res?.data) ? res.data : res?.data?.data ?? [];
+        const res = await productAPI.getAll(1, 500);
+        const raw = res?.data;
+        const productsList = Array.isArray(raw) ? raw : (raw?.data ?? []);
         const items = productsList.filter((p) => ids.includes(p.productId));
         setWishlistItems(items);
       } catch (error) {

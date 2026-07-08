@@ -182,11 +182,36 @@ const PublicBrowse = () => {
         </div>
       </header>
 
-      {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <h2 className="text-3xl font-bold mb-2">Fresh groceries delivered to your door 🛒</h2>
-          <p className="text-blue-100 text-lg">Browse products, add to cart — just like Blinkit!</p>
+      {/* Hero - Blinkit Style */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-green-500 to-teal-600 text-white">
+        <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px'}}></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium">
+                <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-400"></span></span>
+                Delivery in 30 minutes
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight">Sign up & get <span className="text-yellow-300">FREE delivery</span><br className="hidden sm:block" /> on your first order! 🎉</h2>
+              <p className="text-green-50 text-base sm:text-lg max-w-xl">Fresh groceries, daily essentials & more — delivered straight to your doorstep. Over <strong>100+ products</strong> available now.</p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <div className="flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs font-medium">
+                  🕐 30 Min Delivery
+                </div>
+                <div className="flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs font-medium">
+                  🥬 Farm Fresh Produce
+                </div>
+                <div className="flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs font-medium">
+                  💰 Best Prices Guaranteed
+                </div>
+              </div>
+            </div>
+            {!isAuthenticated && (
+              <Link to="/register" className="flex-shrink-0 inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base">
+                🚀 Get Started Free
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 

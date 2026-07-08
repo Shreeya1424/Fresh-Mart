@@ -273,37 +273,37 @@ const CustomerCart = () => {
   const handleCheckout = async () => {
     if (cartItems.length === 0 || !cart) return;
 
+    // Try to get location from localStorage (optional, not required)
     let parsedLocation = null;
     try {
       const storedLocation = localStorage.getItem(getLocationStorageKey());
-      if (!storedLocation) {
-        setLocationError('Please set your delivery location from the header before checkout.');
-        toast.error('Please set your delivery location (zone) before checkout.');
-        return;
+      if (storedLocation) {
+        parsedLocation = JSON.parse(storedLocation);
       }
-      parsedLocation = JSON.parse(storedLocation);
-      setLocationError('');
-    } catch {
-      setLocationError('Please set your delivery location from the header before checkout.');
-      toast.error('Please set your delivery location (zone) before checkout.');
-      return;
-    }
+    } catch {}
 
     const selectedAddress = addresses.find((addr) => addr.id === selectedAddressId);
     let effectiveAddress = selectedAddress || null;
 
     if (!effectiveAddress) {
+      // Auto-create address from zone data or user info
       const name = user?.userName || 'Customer';
       const phone = user?.phone || '';
-      const city = parsedLocation?.city || '';
-      const state = parsedLocation?.state || '';
-      const zip = parsedLocation?.pincodeNumber ? String(parsedLocation.pincodeNumber) : '';
-      const line1 = parsedLocation?.zoneName || city || '';
+      let zoneName = parsedLocation?.zoneName || '';
+      let city = parsedLocation?.city || 'Rajkot';
+      let state = parsedLocation?.state || 'Gujarat';
+      let zip = parsedLocation?.pincodeNumber ? String(parsedLocation.pincodeNumber) : '';
 
-      if (!line1) {
-        setAddressError('Please add a delivery address from your dashboard before checkout.');
-        toast.error('Please add a delivery address before checkout.');
-        return;
+      // If no location set, use first zone from API
+      if (!zoneName && zones.length > 0) {
+        const firstZone = zones[0];
+        zoneName = firstZone.zoneName || firstZone.ZoneName || 'Rajkot';
+        city = firstZone.city || firstZone.City || 'Rajkot';
+        state = firstZone.state || firstZone.State || 'Gujarat';
+      }
+
+      if (!zoneName) {
+        zoneName = 'Rajkot'; // Final fallback
       }
 
       effectiveAddress = {
@@ -311,7 +311,7 @@ const CustomerCart = () => {
         label: 'Delivery Location',
         fullName: name,
         phone,
-        line1,
+        line1: zoneName,
         line2: '',
         city,
         state,
