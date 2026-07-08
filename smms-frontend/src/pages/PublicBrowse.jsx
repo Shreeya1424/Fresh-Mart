@@ -90,8 +90,46 @@ const PublicBrowse = () => {
 
   const getImageUrl = (url) => {
     if (!url) return null;
+    if (url.includes('localhost:5200')) {
+      return url.replace('http://localhost:5200', 'https://fresh-mart-105h.onrender.com');
+    }
     if (url.startsWith('http')) return url;
     return `https://fresh-mart-105h.onrender.com${url}`;
+  };
+
+  const getSmartFallbackImage = (name) => {
+    const n = (name || '').toLowerCase().trim();
+    if (n.includes('apple') || n.includes('banana') || n.includes('fruit') || n.includes('orange') || n.includes('grape') || n.includes('mango') || n.includes('kiwi') || n.includes('lemon')) {
+      return 'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('potato') || n.includes('tomato') || n.includes('onion') || n.includes('vegetable') || n.includes('veg') || n.includes('ginger') || n.includes('garlic') || n.includes('carrot') || n.includes('chilli') || n.includes('coriander')) {
+      return 'https://images.unsplash.com/photo-1597362925123-77861d3fbac7?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('milk') || n.includes('amul') || n.includes('dairy') || n.includes('cheese') || n.includes('butter') || n.includes('paneer') || n.includes('curd') || n.includes('ghee') || n.includes('taaza')) {
+      return 'https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('bread') || n.includes('pav') || n.includes('toast') || n.includes('bakery') || n.includes('bun') || n.includes('roti') || n.includes('khakhra')) {
+      return 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('biscuit') || n.includes('cookie') || n.includes('snack') || n.includes('chips') || n.includes('namkeen') || n.includes('kurkure') || n.includes('lays') || n.includes('wafer') || n.includes('munch')) {
+      return 'https://images.unsplash.com/photo-1599490659213-e2b9527b0876?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('chocolate') || n.includes('kitkat') || n.includes('cadbury') || n.includes('sweet') || n.includes('candy') || n.includes('dairy milk') || n.includes('5 star') || n.includes('milkeybar')) {
+      return 'https://images.unsplash.com/photo-1581798459219-318e76aecc7b?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('noodle') || n.includes('maggi') || n.includes('pasta') || n.includes('instant') || n.includes('ramen') || n.includes('soup')) {
+      return 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('clean') || n.includes('wash') || n.includes('detergent') || n.includes('soap') || n.includes('surf') || n.includes('harpic') || n.includes('liquid') || n.includes('all out') || n.includes('power poket') || n.includes('aer') || n.includes('comfort') || n.includes('lizol') || n.includes('detto')) {
+      return 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('rice') || n.includes('atta') || n.includes('dal') || n.includes('wheat') || n.includes('flour') || n.includes('pulse') || n.includes('grain') || n.includes('besan') || n.includes('suji') || n.includes('maida')) {
+      return 'https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=400&h=400&fit=crop';
+    }
+    if (n.includes('shampoo') || n.includes('oil') || n.includes('cream') || n.includes('paste') || n.includes('colgate') || n.includes('brush') || n.includes('personal') || n.includes('face') || n.includes('care') || n.includes('handwash') || n.includes('lotion')) {
+      return 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400&h=400&fit=crop';
+    }
+    return 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=400&fit=crop';
   };
 
   const getStockInfo = (stock, low) => {
@@ -203,10 +241,10 @@ const PublicBrowse = () => {
                 <div key={product.productId} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
                   {/* Image */}
                   <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                    <img src={product.imageUrl ? getImageUrl(product.imageUrl) : `https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=400&fit=crop`}
+                    <img src={product.imageUrl ? getImageUrl(product.imageUrl) : getSmartFallbackImage(product.name)}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => { e.target.onerror = null; e.target.src = `https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=400&fit=crop`; }} />
+                      onError={(e) => { e.target.onerror = null; e.target.src = getSmartFallbackImage(product.name); }} />
                     <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium ${stock.cls}`}>
                       {stock.label}
                     </div>
@@ -281,11 +319,10 @@ const PublicBrowse = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
-                {selectedProduct.imageUrl ? (
-                  <img src={getImageUrl(selectedProduct.imageUrl)} alt={selectedProduct.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center"><Package className="h-16 w-16 text-gray-300" /></div>
-                )}
+                <img src={selectedProduct.imageUrl ? getImageUrl(selectedProduct.imageUrl) : getSmartFallbackImage(selectedProduct.name)}
+                  alt={selectedProduct.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.target.onerror = null; e.target.src = getSmartFallbackImage(selectedProduct.name); }} />
               </div>
               <div className="space-y-4">
                 <p className="text-gray-600">{selectedProduct.description}</p>

@@ -47,6 +47,9 @@ const CustomerWishlist = () => {
 
   const getProductImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
+    if (imageUrl.includes('localhost:5200')) {
+      return imageUrl.replace('http://localhost:5200', 'https://fresh-mart-105h.onrender.com');
+    }
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
     return `https://fresh-mart-105h.onrender.com${imageUrl}`;
   };
