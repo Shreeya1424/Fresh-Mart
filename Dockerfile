@@ -20,8 +20,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Create uploads directory and set permissions
-RUN mkdir -p /app/wwwroot/uploads/products && chmod -R 777 /app/wwwroot/uploads
+# Ensure uploads directory exists and set permissions (don't overwrite published images)
+RUN chmod -R 755 /app/wwwroot/uploads || (mkdir -p /app/wwwroot/uploads/products && chmod -R 755 /app/wwwroot/uploads)
 
 # Expose the port Render uses
 EXPOSE 8080
